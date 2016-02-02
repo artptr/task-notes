@@ -10,16 +10,18 @@ gulp.task('default', function () {
   var scripts = gulp.src('./src/app.js')
     .pipe(named())
     .pipe(webpack({
-      loaders: [
-        {
-          test: /\.jsx?$/,
-          exclude: /(node_modules|bower_components)/,
-          loader: 'babel',
-          query: {
-            presets: ['react', 'es2015']
+      module: {
+        loaders: [
+          {
+            test: /\.js$/,
+            exclude: /(node_modules)/,
+            loader: 'babel',
+            query: {
+              presets: ['react', 'es2015']
+            }
           }
-        }
-      ],
+        ]
+      },
       devtool: 'source-map'
     }))
     .pipe(gulp.dest(distPath));
