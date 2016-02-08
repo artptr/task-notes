@@ -42,7 +42,7 @@ class App {
 
   render() {
     ReactDOM.render((
-      <div>
+      <div className="app">
         <NoteForm onAdd={this.handleAddNote} />
         <NoteList list={this.list} onRemove={this.handleRemoveNote} />
       </div>

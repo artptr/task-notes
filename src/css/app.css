@@ -1,0 +1,69 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #fff7e3;
+    color: #141110;
+}
+
+body,
+input {
+    font: 14px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.app {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form {
+    border: 1px solid #807966;
+    padding-right: 0;
+    position: relative;
+    overflow: hidden;
+
+    transition: padding-right 0.5s;
+}
+
+.form--error {
+    border-color: #8c0000;
+}
+
+.form--can-submit {
+    padding-right: 40px;
+}
+
+.form__note {
+    border: none;
+    color: #141110;
+    padding: 5px 10px;
+    width: 100%;
+}
+
+.form__submit {
+    background-color: #807966;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+
+    border: none;
+
+    padding: 0;
+
+    position: absolute;
+    height: 100%;
+    width: 40px;
+    right: -40px;
+    top: 0;
+
+    transition: background-color 0.2s, right 0.5s;
+}
+
+.form__submit:hover {
+    background-color: #99917a;
+}
+
+.form--can-submit .form__submit {
+    right: 0;
+}

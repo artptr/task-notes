@@ -1,13 +1,16 @@
 var gulp = require('gulp');
 var webpack = require('webpack-stream');
 var named = require('vinyl-named');
-var inject = require('gulp-inject');
 
 var distPath = './dist';
 
-gulp.task('default', function () {
-  // scripts
-  var scripts = gulp.src('./src/app.js')
+gulp.task('css', function () {
+  return gulp.src('./src/css/app.css')
+    .pipe(gulp.dest(distPath));
+});
+
+gulp.task('js', function () {
+  return gulp.src('./src/js/app.js')
     .pipe(named())
     .pipe(webpack({
       module: {
@@ -25,9 +28,11 @@ gulp.task('default', function () {
       devtool: 'source-map'
     }))
     .pipe(gulp.dest(distPath));
+});
 
-  // page
+gulp.task('html', function () {
   return gulp.src('./src/index.html')
-    .pipe(inject(scripts, {relative: true}))
     .pipe(gulp.dest(distPath));
 });
+
+gulp.task('default', ['css', 'js', 'html']);

@@ -16,7 +16,7 @@ export class NoteList extends React.Component {
 
   render() {
     return (
-      <ul>
+      <ul className="list">
         {
           this.props.list.map((item, i) => {
             const t = moment(item.date);
