@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import moment from 'moment';
 
 import {NoteForm} from './NoteForm';
 import {NoteList} from './NoteList';
@@ -13,6 +14,9 @@ class App {
 
     this.loadList();
     this.updateList();
+
+    window.fillNotes = this.fillNotes.bind(this);
+    window.clearNotes = this.clearNotes.bind(this);
   }
 
   loadList() {
@@ -23,6 +27,24 @@ class App {
       item.date = new Date(item.date);
       return item;
     });
+  }
+
+  fillNotes() {
+    const oldest = this.list[this.list.length - 1] || { date: new Date() };
+    const d = oldest.date;
+
+    for (let i = 1; i <= 100; ++i) {
+      this.list.push({
+        text: 'Lorem ipsum dolor',
+        date: moment(d).subtract(i, 'days').toDate()
+      });
+    }
+    this.updateList();
+  }
+
+  clearNotes() {
+    this.list = [];
+    this.updateList();
   }
 
   updateList() {
@@ -50,4 +72,5 @@ class App {
   }
 }
 
+moment.locale('ru');
 new App('app');

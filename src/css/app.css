@@ -5,11 +5,12 @@
 body {
     background-color: #fff7e3;
     color: #141110;
+    margin: 15px;
 }
 
 body,
 input {
-    font: 14px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font: 16px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .app {
@@ -66,4 +67,55 @@ input {
 
 .form--can-submit .form__submit {
     right: 0;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+
+    width: 75%;
+    margin: 10px auto;
+}
+
+.list__item {
+    padding: 0;
+}
+
+.note {
+    position: relative;
+    padding: 20px 0;
+}
+
+.note + .note {
+    border-top: 1px solid #e5d9b7;
+}
+
+.note__time {
+    color: #807966;
+    font-size: 12px;
+}
+
+.note__remove {
+    position: absolute;
+    top: 20px;
+    right: 0;
+
+    font-size: 20px;
+    line-height: 0.5;
+    cursor: pointer;
+
+    color: transparent;
+    transition: color 0.5s;
+}
+
+.note:hover .note__remove {
+    color: #ccc1a3;
+}
+
+.note .note__remove:hover {
+    color: #590000;
+}
+
+.note:first-child .note__text {
+    font-weight: bold;
 }

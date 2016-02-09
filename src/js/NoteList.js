@@ -11,7 +11,9 @@ export class NoteList extends React.Component {
   handleRemove(i, e) {
     e.preventDefault();
 
-    this.props.onRemove(i);
+    if (confirm('Действительно удалить заметку?')) {
+      this.props.onRemove(i);
+    }
   }
 
   render() {
@@ -22,12 +24,10 @@ export class NoteList extends React.Component {
             const t = moment(item.date);
 
             return (
-              <li key={item.date.getTime()}>
-                <div title={t.format('LLL')}>
-                  {t.fromNow()}
-                  <a href="#" onClick={this.handleRemove.bind(this, i)}>X</a>
-                </div>
-                <div>{item.text}</div>
+              <li className="list__item note" key={item.date.getTime()}>
+                <div className="note__time" title={t.format('LLL')}>{t.fromNow()}</div>
+                <div className="note__remove" title="Удалить" onClick={this.handleRemove.bind(this, i)}>&#x2715;</div>
+                <div className="note__text">{item.text}</div>
               </li>
             );
           })
