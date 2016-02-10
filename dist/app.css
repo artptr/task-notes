@@ -35,9 +35,17 @@ input {
     padding-right: 40px;
 }
 
+.form__note,
+.form__submit {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
 .form__note {
     border: none;
     color: #141110;
+    outline: none;
+    margin: 0;
     padding: 5px 10px;
     width: 100%;
 }

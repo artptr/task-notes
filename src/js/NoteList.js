@@ -1,6 +1,8 @@
 import React from 'react';
 import moment from 'moment';
 
+const noop = () => {};
+
 export class NoteList extends React.Component {
   constructor() {
     super();
@@ -24,7 +26,7 @@ export class NoteList extends React.Component {
             const t = moment(item.date);
 
             return (
-              <li className="list__item note" key={item.date.getTime()}>
+              <li className="list__item note" key={item.date.getTime()} onClick={noop}>
                 <div className="note__time" title={t.format('LLL')}>{t.fromNow()}</div>
                 <div className="note__remove" title="Удалить" onClick={this.handleRemove.bind(this, i)}>&#x2715;</div>
                 <div className="note__text">{item.text}</div>

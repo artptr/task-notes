@@ -32797,7 +32797,7 @@
 	
 	          return _react2.default.createElement(
 	            'li',
-	            { className: 'list__item note', key: item.date.getTime() },
+	            { className: 'list__item note', key: item.date.getTime(), onClick: function onClick() {} },
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'note__time', title: t.format('LLL') },
