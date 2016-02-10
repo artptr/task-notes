@@ -32933,6 +32933,21 @@
 	
 	var noop = function noop() {};
 	
+	function formatTime(m) {
+	  var hours = (0, _moment2.default)().diff(m, 'hours');
+	
+	  switch (true) {
+	    case hours > 6 * 24:
+	      return m.format('LLL');
+	
+	    case hours > 22:
+	      return m.calendar();
+	
+	    default:
+	      return m.fromNow();
+	  }
+	}
+	
 	var NoteList = exports.NoteList = function (_React$Component) {
 	  _inherits(NoteList, _React$Component);
 	
@@ -32964,18 +32979,22 @@
 	        { className: 'list' },
 	        this.props.list.map(function (item, i) {
 	          var t = (0, _moment2.default)(item.date);
+	          var key = item.date.getTime();
+	          var humanTime = formatTime(t).toLowerCase();
+	          var fullTime = t.format('LLL').toLowerCase();
+	          var handleRemove = _this2.handleRemove.bind(_this2, i);
 	
 	          return _react2.default.createElement(
 	            'li',
-	            { className: 'list__item note', key: item.date.getTime(), onClick: noop },
+	            { className: 'list__item note', key: key, onClick: noop },
 	            _react2.default.createElement(
 	              'div',
-	              { className: 'note__time', title: t.format('LLL') },
-	              t.fromNow()
+	              { className: 'note__time', title: fullTime },
+	              humanTime
 	            ),
 	            _react2.default.createElement(
 	              'div',
-	              { className: 'note__remove', title: 'Удалить', onClick: _this2.handleRemove.bind(_this2, i) },
+	              { className: 'note__remove', title: 'Удалить', onClick: handleRemove },
 	              '✕'
 	            ),
 	            _react2.default.createElement(

@@ -3,6 +3,21 @@ import moment from 'moment';
 
 const noop = () => {};
 
+function formatTime(m) {
+  const hours = moment().diff(m, 'hours');
+
+  switch (true) {
+    case hours > 6*24:
+      return m.format('LLL');
+
+    case hours > 22:
+      return m.calendar();
+
+    default:
+      return m.fromNow();
+  }
+}
+
 export class NoteList extends React.Component {
   constructor() {
     super();
@@ -24,11 +39,15 @@ export class NoteList extends React.Component {
         {
           this.props.list.map((item, i) => {
             const t = moment(item.date);
+            const key = item.date.getTime();
+            const humanTime = formatTime(t).toLowerCase();
+            const fullTime = t.format('LLL').toLowerCase();
+            const handleRemove = this.handleRemove.bind(this, i);
 
             return (
-              <li className="list__item note" key={item.date.getTime()} onClick={noop}>
-                <div className="note__time" title={t.format('LLL')}>{t.fromNow()}</div>
-                <div className="note__remove" title="Удалить" onClick={this.handleRemove.bind(this, i)}>&#x2715;</div>
+              <li className="list__item note" key={key} onClick={noop}>
+                <div className="note__time" title={fullTime}>{humanTime}</div>
+                <div className="note__remove" title="Удалить" onClick={handleRemove}>&#x2715;</div>
                 <div className="note__text">{item.text}</div>
               </li>
             );
