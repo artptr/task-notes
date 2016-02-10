@@ -69,7 +69,7 @@
 	
 	var _NoteForm = __webpack_require__(259);
 	
-	var _NoteList = __webpack_require__(261);
+	var _NoteList = __webpack_require__(262);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -19764,7 +19764,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {//! moment.js
-	//! version : 2.11.1
+	//! version : 2.11.2
 	//! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 	//! license : MIT
 	//! momentjs.com
@@ -21581,7 +21581,7 @@
 	    }
 	
 	    // ASP.NET json date format regex
-	    var aspNetRegex = /(\-)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)\.?(\d{3})?)?/;
+	    var aspNetRegex = /^(\-)?(?:(\d*)[. ])?(\d+)\:(\d+)(?:\:(\d+)\.?(\d{3})?\d*)?$/;
 	
 	    // from http://docs.closure-library.googlecode.com/git/closure_goog_date_date.js.source.html
 	    // somewhat more in line with 4.4.3.2 2004 spec, but allows decimal anywhere
@@ -23336,7 +23336,7 @@
 	    // Side effect imports
 	
 	
-	    utils_hooks__hooks.version = '2.11.1';
+	    utils_hooks__hooks.version = '2.11.2';
 	
 	    setHookCallback(local__createLocal);
 	
@@ -32583,12 +32583,12 @@
 
 	'use strict';
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	exports.NoteForm = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(2);
 	
@@ -32597,6 +32597,10 @@
 	var _classnames = __webpack_require__(260);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
+	
+	var _reactInputPlaceholder = __webpack_require__(261);
+	
+	var _reactInputPlaceholder2 = _interopRequireDefault(_reactInputPlaceholder);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -32607,6 +32611,8 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var limit = 200;
+	
+	var Input = (0, _reactInputPlaceholder2.default)(_react2.default).Input;
 	
 	var NoteForm = exports.NoteForm = function (_React$Component) {
 	  _inherits(NoteForm, _React$Component);
@@ -32663,7 +32669,7 @@
 	      return _react2.default.createElement(
 	        'form',
 	        { className: formClasses, onSubmit: this.handleSubmit },
-	        _react2.default.createElement('input', {
+	        _react2.default.createElement(Input, {
 	          type: 'text',
 	          className: 'form__note',
 	          placeholder: 'Введите заметку',
@@ -32736,16 +32742,178 @@
 
 /***/ },
 /* 261 */
+/***/ function(module, exports) {
+
+	var isPlaceholderSupported =    (typeof document !== 'undefined')
+	                             && 'placeholder' in document.createElement('input');
+	
+	/**
+	 * Input is a wrapper around React.DOM.input with a `placeholder` shim for IE9.
+	 * NOTE: only supports "controlled" inputs (http://facebook.github.io/react/docs/forms.html#controlled-components)
+	 */
+	var createShimmedElement = function(React, elementConstructor, name) {
+	    return React.createClass({
+	        displayName: name,
+	
+	        componentWillMount: function() {
+	            this.needsPlaceholding = this.props.placeholder && !isPlaceholderSupported;
+	        },
+	
+	        componentWillReceiveProps: function(props) {
+	            this.needsPlaceholding = props.placeholder && !isPlaceholderSupported;
+	        },
+	
+	        // this component supports valueLink or value/onChange.
+	        // borrowed from LinkedValueMixin.js
+	        getValue: function() {
+	            if (this.props.valueLink) {
+	                return this.props.valueLink.value;
+	            }
+	
+	            return this.props.value;
+	        },
+	
+	        getOnChange: function() {
+	            if (this.props.valueLink) {
+	                return this._handleLinkedValueChange;
+	            }
+	
+	            return this.props.onChange;
+	        },
+	
+	        _handleLinkedValueChange: function(e) {
+	            this.props.valueLink.requestChange(e.target.value);
+	        },
+	
+	        // keep track of focus
+	        onFocus: function(e) {
+	            this.hasFocus = true;
+	            this.setSelectionIfNeeded(e.target);
+	
+	            if (this.props.onFocus) {
+	                return this.props.onFocus(e);
+	            }
+	        },
+	        onBlur: function(e) {
+	            this.hasFocus = false;
+	
+	            if (this.props.onBlur) {
+	                return this.props.onBlur(e);
+	            }
+	        },
+	
+	        setSelectionIfNeeded: function(node) {
+	            if (   this.needsPlaceholding
+	                && 'setSelectionRange' in node
+	                && this.hasFocus
+	                && this.isPlaceholding
+	                && (node.selectionStart !== 0 || node.selectionEnd !== 0)) {
+	                node.setSelectionRange(0, 0);
+	            } // if placeholder is visible, ensure cursor is at start of input
+	        },
+	
+	        onChange: function(e) {
+	            var onChange = this.getOnChange();
+	            var value;
+	            var index;
+	
+	            if (this.isPlaceholding) {
+	                // remove placeholder when text is added
+	                value = e.target.value;
+	                index = value.indexOf(this.props.placeholder);
+	
+	                if (index !== -1) {
+	                    e.target.value = value.slice(0, index);
+	                }
+	            }
+	
+	            if (onChange) {
+	                return onChange(e);
+	            }
+	        },
+	
+	        onSelect: function(e) {
+	            if (this.isPlaceholding) {
+	                this.setSelectionIfNeeded(e.target);
+	
+	                return false;
+	            } else if (this.props.onSelect) {
+	                return this.props.onSelect(e);
+	            }
+	        },
+	
+	        componentDidUpdate: function() {
+	            this.setSelectionIfNeeded(this.getDOMNode());
+	        },
+	
+	        render: function() {
+	            var props = {};
+	            var value;
+	            var key;
+	
+	            for (key in this.props) {
+	                if (this.props.hasOwnProperty(key)) {
+	                    props[key] = this.props[key];
+	                }
+	            }
+	
+	            if (this.needsPlaceholding) {
+	                // override valueLink and event handlers
+	                props.onFocus = this.onFocus;
+	                props.onBlur = this.onBlur;
+	                props.onChange = this.onChange;
+	                props.onSelect = this.onSelect;
+	                props.valueLink = undefined;
+	
+	                value = this.getValue();
+	
+	                if (!value) {
+	                    this.isPlaceholding = true;
+	                    value = this.props.placeholder;
+	                    props.className += ' placeholder';
+	                } else {
+	                    this.isPlaceholding = false;
+	                }
+	
+	                props.value = value;
+	            }
+	
+	            if (!('createElement' in React)) { /* start -- to be removed in 2.0.0 */
+	                return this.transferPropsTo(elementConstructor());
+	            } else { /* -- end */
+	                return React.createElement(elementConstructor, props, this.props.children);
+	            }
+	        }
+	    });
+	};
+	
+	module.exports = function(React) {
+	    if (!('createElement' in React)) { /* start -- to be removed in 2.0.0 */
+	        return {
+	            Input: createShimmedElement(React, React.DOM.input, 'Input'),
+	            Textarea: createShimmedElement(React, React.DOM.textarea, 'Textarea')
+	        };
+	    } else { /* -- end */
+	        return {
+	            Input: createShimmedElement(React, 'input', 'Input'),
+	            Textarea: createShimmedElement(React, 'textarea', 'Textarea')
+	        };
+	    }
+	};
+
+
+/***/ },
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	exports.NoteList = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(2);
 	
@@ -32762,6 +32930,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var noop = function noop() {};
 	
 	var NoteList = exports.NoteList = function (_React$Component) {
 	  _inherits(NoteList, _React$Component);
@@ -32797,7 +32967,7 @@
 	
 	          return _react2.default.createElement(
 	            'li',
-	            { className: 'list__item note', key: item.date.getTime(), onClick: function onClick() {} },
+	            { className: 'list__item note', key: item.date.getTime(), onClick: noop },
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'note__time', title: t.format('LLL') },

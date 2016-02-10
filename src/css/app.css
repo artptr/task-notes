@@ -13,6 +13,20 @@ input {
     font: 16px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+input::-webkit-input-placeholder {
+    color: #99917a;
+}
+input::-moz-placeholder {
+    color: #99917a;
+    opacity: 1;
+}
+input:-ms-input-placeholder {
+    color: #99917a;
+}
+input.placeholder {
+    color: #99917a;
+}
+
 .app {
     max-width: 800px;
     margin: 0 auto;

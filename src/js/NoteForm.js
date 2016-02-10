@@ -1,7 +1,10 @@
 import React from 'react';
 import classnames from 'classnames';
+import placeholder from 'react-input-placeholder';
 
 const limit = 200;
+
+const Input = placeholder(React).Input;
 
 export class NoteForm extends React.Component {
   constructor() {
@@ -49,7 +52,7 @@ export class NoteForm extends React.Component {
 
     return (
       <form className={formClasses} onSubmit={this.handleSubmit}>
-        <input
+        <Input
           type="text"
           className="form__note"
           placeholder="Введите заметку"
