@@ -14,9 +14,6 @@ class App {
 
     this.loadList();
     this.updateList();
-
-    window.fillNotes = this.fillNotes.bind(this);
-    window.clearNotes = this.clearNotes.bind(this);
   }
 
   loadList() {
@@ -73,4 +70,8 @@ class App {
 }
 
 moment.locale('ru');
-new App('app');
+
+let app = new App('app');
+
+window.fillNotes = app.fillNotes.bind(app);
+window.clearNotes = app.clearNotes.bind(app);

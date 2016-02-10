@@ -86,9 +86,6 @@
 	
 	    this.loadList();
 	    this.updateList();
-	
-	    window.fillNotes = this.fillNotes.bind(this);
-	    window.clearNotes = this.clearNotes.bind(this);
 	  }
 	
 	  _createClass(App, [{
@@ -156,7 +153,11 @@
 	}();
 	
 	_moment2.default.locale('ru');
-	new App('app');
+	
+	var app = new App('app');
+	
+	window.fillNotes = app.fillNotes.bind(app);
+	window.clearNotes = app.clearNotes.bind(app);
 
 /***/ },
 /* 2 */
